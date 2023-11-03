@@ -2,16 +2,28 @@
 #include <ctype.h>
 #include "/usr/include/python3.10/Python.h"
 
-PyObject* function(PyObject* data)
+#define ENDLINE printf("\n")
+
+PyObject* function(PyObject* argdata)
 {
+	PyObject* retdata;
 	int i;
-	
-	printf("\n[0x%x]", data);
+	i = 888;
 
-	// PyObject_GetAttr(data, Py_BuildValue("s", "whatever"));
-	// return Py_BuildValue("i", i);
+	retdata = Py_BuildValue("i", argdata->ob_refcnt);
+	printf(
+		"\n\nARGDATA:\n%s",
+		argdata->ob_type->tp_doc
+	);
+	printf(
+		"\n\nRETDATA:\n%s",
+		retdata->ob_type->tp_doc
+	);
+	ENDLINE;
 
-	return NULL;
+	// retdata = PyObject_GetAttr(argdata, "get");
+
+	return retdata;
 }
 
 // PyObject_GetAttr(data, Py_BuildValue("s", "whatever"));
