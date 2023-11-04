@@ -9,11 +9,9 @@ argdata = {
 };
 
 own_libc = ctypes.cdll.LoadLibrary("/home/sirius/etc/sw_projects/c_py/bin/libown.so");
+own_libc.function.restype = ctypes.py_object;
 retdata = own_libc.function(ctypes.py_object(argdata));
 
 print("\n")
-print(type(retdata));
-print(retdata);
-retdata = ctypes.py_object(retdata);
 print(type(retdata));
 print(retdata);

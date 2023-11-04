@@ -10,20 +10,22 @@ PyObject* function(PyObject* argdata)
 	int i;
 	i = 888;
 
-	retdata = Py_BuildValue("i", argdata->ob_refcnt);
-	printf(
-		"\n\nARGDATA:\n%s",
-		argdata->ob_type->tp_doc
-	);
-	printf(
-		"\n\nRETDATA:\n%s",
-		retdata->ob_type->tp_doc
-	);
+	// this is still unresolved
+	// retdata = Py_BuildValue("i", argdata->ob_refcnt);
+
+	// retdata = Py_BuildValue("O", argdata);
+
+	// printf(
+	// 	"\n\nARGDATA:\n%s",
+	// 	argdata->ob_type->tp_doc
+	// );
+	// printf(
+	// 	"\n\nRETDATA:\n%s",
+	// 	retdata->ob_type->tp_doc
+	// );
 	ENDLINE;
 
-	// retdata = PyObject_GetAttr(argdata, "get");
-
-	return retdata;
+	return argdata;
 }
 
 // PyObject_GetAttr(data, Py_BuildValue("s", "whatever"));
