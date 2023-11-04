@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <ctype.h>
+
+// boilerplate
 #include "/usr/include/python3.10/Python.h"
+//
 
 #define ENDLINE printf("\n")
+
+void printSubclasses(PyObject* data);
+void printDoc(PyObject* data);
+void printType(PyObject* data);
 
 PyObject* function(PyObject* argdata)
 {
@@ -12,29 +19,61 @@ PyObject* function(PyObject* argdata)
 
 	// this is still unresolved
 	// retdata = Py_BuildValue("i", argdata->ob_refcnt);
-
 	// retdata = Py_BuildValue("O", argdata);
 
-	// printf(
-	// 	"\n\nARGDATA:\n%s",
-	// 	argdata->ob_type->tp_doc
-	// );
-	// printf(
-	// 	"\n\nRETDATA:\n%s",
-	// 	retdata->ob_type->tp_doc
-	// );
+	printDoc(argdata);
+	printSubclasses(argdata);
+	printType(argdata);
+
 	ENDLINE;
 
 	return argdata;
+}
+
+void printType(PyObject* data)
+{
+	printf(
+		"\n\nprintDoc:\n%s",
+		data->ob_type->tp_doc
+	);
+}
+
+void printDoc(PyObject* data)
+{
+	if(data->ob_type->tp_doc == NULL){
+		return;
+	}
+	printf(
+		"\n\nprintDoc:\n%s",
+		data->ob_type->tp_doc
+	);
+
+	return;
+}
+
+void printSubclasses(PyObject* data)
+{
+	PyObject *tmp;
+	tmp = data->ob_type->tp_subclasses;
+	if(tmp == NULL){
+		printf("\nObject has no subclasses!!!");
+		return;
+	}
+	printf(
+		"\nprintSubclassesDoc:\n%s",
+		tmp->ob_type->tp_doc
+	);
+
+	return;
 }
 
 // PyObject_GetAttr(data, Py_BuildValue("s", "whatever"));
 // return Py_BuildValue("i", i);	
 
 // typedef struct _object {
-//     _PyObject_HEAD_EXTRA
-//     Py_ssize_t ob_refcnt;
-//     PyTypeObject *ob_type;
+//     _PyObject_HEAD_EXTRA 	// idk
+//     Py_ssize_t ob_refcnt;	// references of the objects held
+//     PyTypeObject *ob_type;	// idk
 // } PyObject;
 
 // struct _typeobject {

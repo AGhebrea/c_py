@@ -84,3 +84,10 @@ btrace:
 #6  0x00007ffff7a1e157 in function () from /home/sirius/etc/sw_projects/c_py/bin/libown.so
 
 ```
+
+# Q5:
+```
+own_libc.function.restype = ctypes.py_object;
+```
+
+what is that needed
