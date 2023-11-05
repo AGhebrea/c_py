@@ -9,7 +9,8 @@
 
 void printSubclasses(PyObject* data);
 void printDoc(PyObject* data);
-void printType(PyObject* data);
+void printName(PyObject* data);
+void getAttributes(PyObject* data);
 
 PyObject* function(PyObject* argdata)
 {
@@ -19,23 +20,49 @@ PyObject* function(PyObject* argdata)
 
 	// this is still unresolved
 	// retdata = Py_BuildValue("i", argdata->ob_refcnt);
+	// 
+
 	// retdata = Py_BuildValue("O", argdata);
 
 	printDoc(argdata);
 	printSubclasses(argdata);
-	printType(argdata);
+	printName(argdata);
+	getAttributes(argdata);
 
 	ENDLINE;
 
 	return argdata;
 }
 
-void printType(PyObject* data)
+void getAttributes(PyObject* data)
+{
+	// typedef PyObject *(*getattrfunc)(PyObject *, char *);
+	// getattrfunc _tp_getattr;
+	// _tp_getattr = data->ob_type->tp_getattr;
+	// printf("\nGetting attributes");
+	// _tp_getattr(data, "__str__");
+
+	/*
+		A thing we can do is try to do
+		traverseproc tp_traverse;
+		and for each accessible object we can 
+		try to call printDoc and printName
+	*/
+
+	// typedef int (*visitproc)(PyObject *, void *);
+	// typedef int (*traverseproc)(PyObject *, visitproc, void *);
+	traverseproc _tp_traverse;
+	
+
+}
+
+void printName(PyObject* data)
 {
 	printf(
-		"\n\nprintDoc:\n%s",
-		data->ob_type->tp_doc
+		"\n\nprintName:\n%s",
+		data->ob_type->tp_name
 	);
+	ENDLINE;
 }
 
 void printDoc(PyObject* data)
@@ -47,6 +74,7 @@ void printDoc(PyObject* data)
 		"\n\nprintDoc:\n%s",
 		data->ob_type->tp_doc
 	);
+	ENDLINE;
 
 	return;
 }
@@ -63,6 +91,7 @@ void printSubclasses(PyObject* data)
 		"\nprintSubclassesDoc:\n%s",
 		tmp->ob_type->tp_doc
 	);
+	ENDLINE;
 
 	return;
 }

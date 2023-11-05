@@ -10,8 +10,6 @@ argdata = {
 	"whatever": "unga bunga"
 };
 
-argdata = "abc"
-
 # boilerplate
 own_libc = ctypes.cdll.LoadLibrary(f"{os.getcwd()}/bin/libown.so"); # hack, fix paths
 own_libc.function.restype = ctypes.py_object;
