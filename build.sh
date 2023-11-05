@@ -10,5 +10,5 @@ if [ ! -d ./bin ]; then
 	mkdir bin
 fi
 
-gcc $SRCDIR/c/main.c -shared -fPIC -o ./bin/libown.so
+gcc $SRCDIR/c/main.c -shared -fPIC -o ./bin/libown.so -ggdb3
 python $SRCDIR/py/main.py

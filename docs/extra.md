@@ -91,3 +91,16 @@ own_libc.function.restype = ctypes.py_object;
 ```
 
 what is that needed
+
+# Q6:
+```
+static int
+dict_traverse(PyObject *op, visitproc visit, void *arg)
+{
+    PyDictObject *mp = (PyDictObject *)op;
+    ...
+}
+```
+
+I read somewhere in the docs that these type of casts (any object to PyObject) always
+work. If that is the case then how do they work to ensure that?

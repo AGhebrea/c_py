@@ -7,11 +7,15 @@
 
 #define ENDLINE printf("\n")
 
+int glob_counter;
+int depth;
+
 void printSubclasses(PyObject* data);
 void printDoc(PyObject* data);
 void printName(PyObject* data);
 void getAttributes(PyObject* data);
 int visitProcPrintDoc(PyObject*, void*);
+int traverseSub(PyObject*, void*);
 
 PyObject* function(PyObject* argdata)
 {
@@ -45,29 +49,83 @@ void getAttributes(PyObject* data)
 
 	// typedef int (*visitproc)(PyObject *, void *);
 	// typedef int (*traverseproc)(PyObject *, visitproc, void *);
-	
+
 	traverseproc _tp_traverse;
 	visitproc _visitproc;
 	_tp_traverse = data->ob_type->tp_traverse;
-	_visitproc = visitProcPrintDoc;
-
-	// idk what the void* is supposed to be
+	_visitproc = traverseSub;
+	// _visitproc = visitProcPrintDoc;
 	_tp_traverse(data, _visitproc, NULL);
+	_tp_traverse(data->ob_type->tp_dict, _visitproc, NULL);
 
 	return;	
 }
 
+int traverseSub(PyObject* data, void* idk) // TODO: fix
+{
+	traverseproc _tp_traverse;
+	visitproc _visitproc;
+	PyObject* dict;
+	_tp_traverse = data->ob_type->tp_traverse;
+	dict = data->ob_type->tp_dict;
+	_visitproc = traverseSub;
+
+	if(data == NULL){
+		printf("\ndata was null");
+		return 0;
+	}
+	if(dict == NULL){
+		printf("\ndict was null");
+		return 0;
+	}
+
+	printf("\ndepth:%d", depth);
+	printName(data);
+	printf("\ndata[0x%x]", data);
+	printf("\ntp_traverse:[0x%x]", _tp_traverse);
+
+	if(_tp_traverse != NULL){
+		// depth += 1;
+		_tp_traverse(data, _visitproc, NULL);
+		// depth -= 1;
+		printf("\n_tp_traverse was NOT null");
+		return 0;
+	}else{
+		printf("\n_tp_traverse was null");
+		return 0;
+	}
+
+	//     struct PyMemberDef *tp_members;
+	// there is also this which might be of interest.
+
+	return 0;
+}
+
+/*
+
+#0  0x00007ffff7d07125 in meth_traverse (m=0x7ffff7a2f900, visit=0x7ffff7a1e1d4 <traverseSub>, arg=0x0)
+    at /usr/src/debug/python3.10-3.10.11-1.fc36.x86_64/Objects/methodobject.c:252
+#1  0x00007ffff7a1e30b in traverseSub (data=0x7ffff7a65850, idk=0x0) at ./src/c/main.c:93
+#2  0x00007ffff7d07265 in dict_traverse (op=<optimized out>, visit=0x7ffff7a1e1d4 <traverseSub>, arg=0x0)
+    at /usr/src/debug/python3.10-3.10.11-1.fc36.x86_64/Objects/dictobject.c:3255
+#3  0x00007ffff7a1e1d1 in getAttributes (data=0x7fffea141b00) at ./src/c/main.c:59
+#4  0x00007ffff7a1e158 in function (argdata=0x7fffea141b00) at ./src/c/main.c:35
+
+*/
+
 int visitProcPrintDoc(PyObject* data, void* idk)
 {
-	printf(
-		"\n\nvisitProcPrintDoc:"
-		"\ndata:[0x%x]"
-		"\nvoid*:[0x%x]",
-		data,
-		idk
-	);
-	printName(data);
-	printDoc(data);
+	glob_counter++;
+	// printf(
+	// 	"\n\nvisitProcPrintDoc:"
+	// 	"\ndata:[0x%x]"
+	// 	"\nvoid*:[0x%x]"
+	// 	"\nname:[%s]",
+	// 	data->ob_type->tp_name,
+	// 	data,
+	// 	idk
+	// );
+
 	return 0;
 }
 
@@ -77,7 +135,6 @@ void printName(PyObject* data)
 		"\n\nprintName:\n%s",
 		data->ob_type->tp_name
 	);
-	ENDLINE;
 }
 
 void printDoc(PyObject* data)
@@ -89,7 +146,6 @@ void printDoc(PyObject* data)
 		"\n\nprintDoc:\n%s",
 		data->ob_type->tp_doc
 	);
-	ENDLINE;
 
 	return;
 }
@@ -106,7 +162,6 @@ void printSubclasses(PyObject* data)
 		"\nprintSubclassesDoc:\n%s",
 		tmp->ob_type->tp_doc
 	);
-	ENDLINE;
 
 	return;
 }
