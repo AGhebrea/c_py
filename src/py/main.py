@@ -7,7 +7,9 @@ class custom:
 		pass;
 
 argdata = {
-	"whatever": "unga bunga"
+	"key0": "value0",
+	"key1": "value1",
+	"key2": "value2",
 };
 
 # boilerplate
