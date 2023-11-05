@@ -8,6 +8,8 @@
 
 ## special req
 [ ] throw errors from c/c++ (c is cooler), catch them in python  
+	there should be custom functions to do that using the API
+	and it is not like in C++ but anyways this stays a req  
 
 ## refs
 

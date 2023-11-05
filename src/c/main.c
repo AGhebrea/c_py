@@ -32,24 +32,19 @@ PyObject* function(PyObject* argdata)
 	// printDoc(argdata);
 	// printSubclasses(argdata);
 	// printName(argdata);
-	getAttributes(argdata);
+	// getAttributes(argdata);
 
 	ENDLINE;
 
 	return argdata;
 }
 
+/*
+	see _PyObject_GenericGetAttrWithDict
+	source code object.c:1527
+*/
 void getAttributes(PyObject* data)
 {
-	// typedef PyObject *(*getattrfunc)(PyObject *, char *);
-	// getattrfunc _tp_getattr;
-	// _tp_getattr = data->ob_type->tp_getattr;
-	// printf("\nGetting attributes");
-	// _tp_getattr(data, "__str__");
-
-	// typedef int (*visitproc)(PyObject *, void *);
-	// typedef int (*traverseproc)(PyObject *, visitproc, void *);
-
 	traverseproc _tp_traverse;
 	visitproc _visitproc;
 	_tp_traverse = data->ob_type->tp_traverse;
